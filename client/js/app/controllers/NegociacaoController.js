@@ -4,14 +4,14 @@ class NegociacaoController {
     this._inputData = document.querySelector("#data");
     this._inputValor = document.querySelector("#valor");
 
-    this._listaNegociacoes = new Bild(
+    this._listaNegociacoes = new Bind(
       new ListaNegociacoes(),
       new NegociacoesView(document.querySelector("#negociacoesView")),
       "adiciona",
       "esvazia"
     );
 
-    this._mensagem = new Bild(
+    this._mensagem = new Bind(
       new Mensagem(),
       new MensagemView(document.querySelector("#mensagemView")),
       "texto"
