@@ -21,17 +21,43 @@ class NegociacaoController {
   adiciona(event) {
     event.preventDefault();
     this._listaNegociacoes.adiciona(this._criaNegociacao());
-    this._mensagem.texto = "Negociação adicionada com sucesso";
+    this._mensagem.texto = "Negociação adicionada com sucesso.";
     this._limpaFormulario();
   }
 
-  importaNegociacoes(){
-    alert('importando negociacoes')
+  importaNegociacoes() {
+    let service = new NegociacaoService();
+    service.obterNegociacoesDaSemana((erro, negociacoes) => {
+      if(erro){
+        this._mensagem.texto = erro;
+        return;
+      }
+      negociacoes.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao));
+      this._mensagem.texto = "Negociações importadas com sucesso.";
+
+      service.obterNegociacoesDaSemanaAnterior((erro, negociacoes) => {
+        if(erro){
+          this._mensagem.texto = erro;
+          return;
+        }
+        negociacoes.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao));
+  
+        service.obterNegociacoesDaSemanaRetrasada((erro, negociacoes) => {
+          if(erro){
+            this._mensagem.texto = erro;
+            return;
+          }
+          negociacoes.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao));
+          this._mensagem.texto = "Negociações importadas com sucesso";
+        });
+      });
+    });
+
   }
 
   apaga() {
     this._listaNegociacoes.esvazia();
-    this._mensagem.texto = "Negociações Apagadas com sucesso";
+    this._mensagem.texto = "Negociações Apagadas com sucesso.";
   }
 
   _criaNegociacao() {
@@ -48,5 +74,4 @@ class NegociacaoController {
     this._inputValor.value = 0.0;
     this._inputData.focus();
   }
-
 }
